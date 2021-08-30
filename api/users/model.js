@@ -4,7 +4,7 @@
 const shortid = require("shortid");
 
 const initializeUsers = () => [
-  { id: shortid.generate(), name: "Ed Carter", bio: "hero" },
+  { id: "1", name: "Ed Carter", bio: "hero" },
   { id: shortid.generate(), name: "Mary Edwards", bio: "super hero" },
 ];
 
@@ -16,7 +16,6 @@ let users = initializeUsers();
 // DATABASE ACCESS FUNCTIONS
 const find = () => {
   // SELECT * FROM users;
-  // return users;
   return Promise.resolve(users);
 };
 

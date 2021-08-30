@@ -38,16 +38,59 @@ server.get("/api/users", async (req, res) => {
     });
 });
 
-server.get("/api/users/:id", () => {
-  console.log("returns user with id");
+server.get("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  userFunctions
+    .findById(id)
+    .then((user) => {
+      if (!user) {
+        res.status(404).json({ message: "does not exist" });
+      } else {
+        res.status(200).json(user);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
 });
 
-server.delete("api/users/:id", (res, req) => {
-  console.log("deletes a user with id");
+server.delete("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  userFunctions
+    .remove(id)
+    .then((user) => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(404).json({ message: "does not exist" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
 });
 
-server.put("api/users/:id", () => {
-  console.log("updates a user with id");
+server.put("/api/users/:id", (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+  if (!changes.name || !changes.bio) {
+    res.status(400).json({ message: "provide name and bio" });
+  } else {
+    userFunctions
+      .update(id, changes)
+      .then((user) => {
+        if (user) {
+          res.status(201).json(user);
+        } else {
+          res.status(404).json({ message: "does not exist" });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 });
 
 server.get("*", (req, res) => {
